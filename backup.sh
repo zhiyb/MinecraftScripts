@@ -4,6 +4,7 @@ source=world
 bakfolder=backup
 prefix="${source}_"
 suffix=.tar.bz2
+pattern="${prefix}[0-9]\{8\}-[0-9]\{6\}\.tar\.bz2\$"
 sleep=1h
 baknum=64
 
@@ -20,7 +21,7 @@ function doBackup
 
 function tidyBackups
 {
-	remove="$(find -L "$bakfolder" -type f -name "${prefix}*-*${suffix}" 2> /dev/null | grep "[0-9]\{8\}-[0-9]\{6\}" | sort | head -n -$baknum | xargs)"
+	remove="$(find -L "$bakfolder" -type f -name "${prefix}*-*${suffix}" 2> /dev/null | grep "$pattern" | sort | head -n -$baknum | xargs)"
 	[ -z "$remove" ] && return
 	rm -f $remove
 	echo "Removed: $remove"
