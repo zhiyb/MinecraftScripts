@@ -13,6 +13,7 @@ while :; do
 
 	echo -e "\e[1;33mStarting $file...\e[0m"
 	$java -jar ./"$file" $args
-	[ "$restart" != "true" ] && read -s && exit 0
+	[ "$restart" != "true" ] && break
 	sleep 5
 done
+exit 0
