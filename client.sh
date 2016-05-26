@@ -3,24 +3,7 @@
 # Argument:
 # list	| Fetch version list from official server
 
-# Game settings
-auth_player_name="Steve"
-auth_session=0
-auth_uuid=0
-auth_access_token=0
-user_type=legacy
-
-# Game version, snapshot or release or a specific version
-version=snapshot
-# Host operating system, valid values: linux, windows, osx
-os=windows
-arch=64
-# Skip checking file integrities and assets
-skipcheck=true
-
-# Executables
-java="java -Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M"
-jq=./bin/jq
+. config.conf
 
 # File folders
 folder=minecraft

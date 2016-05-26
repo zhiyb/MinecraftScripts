@@ -4,8 +4,8 @@
 type=snapshot
 manifest=https://launchermeta.mojang.com/mc/game/version_manifest.json
 
-infofile="$1"
-[ -z "$infofile" ] && infofile=latest.txt
+[ -z "$folder" ] && folder=server
+[ -z "$infofile" ] && infofile=$folder/latest.txt
 
 get()
 {
@@ -14,6 +14,7 @@ get()
 
 download()
 {
+	mkdir -p "$(dirname "$2")"
 	curl --progress-bar -o "$2" -L "$1"
 	#aria2c --daemon=false --enable-rpc=false -c -o "$2" "$1"
 }
@@ -27,7 +28,7 @@ time="$(echo "$info" | jq -r ".releaseTime")"
 url="$(echo "$info" | jq -r ".url")"
 echo "Latest $type: $version ($time)"
 
-file="$version.jar"
+file="$folder/$version.jar"
 if [ -e "$file" ]; then
 	echo -e "File \e[1;32m$file\e[0m already exists"
 else
@@ -44,5 +45,5 @@ else
 	fi
 fi
 
-echo "$file" > "$infofile"
+echo "$version.jar" > "$infofile"
 exit 0
