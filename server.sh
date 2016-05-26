@@ -8,7 +8,7 @@ export folder=server
 export infofile=$folder/latest.txt
 
 while :; do
-	[ "$update" == "true" ] && ./update.sh
+	[ "$update" == "true" ] && ./update_server.sh
 	[ -e "$infofile" ] && file="$(<$infofile)"
 	[ -z "$file" ] && echo -e "\e[1;31mCannot locate executable file from $infofile\e[0m" && read -s && exit 1
 
