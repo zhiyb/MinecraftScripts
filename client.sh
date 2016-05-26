@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Argument:
+# list	| Fetch version list from official server
+
 # Game settings
 auth_player_name="Steve"
 auth_session=0
@@ -11,12 +14,13 @@ user_type=legacy
 version=snapshot
 # Host operating system, valid values: linux, windows, osx
 os=windows
+arch=64
 # Skip checking file integrities and assets
 skipcheck=true
 
 # Executables
-java="java -d64 -Xmx1G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M"
-jq=jq
+java="java -Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M"
+jq=./bin/jq
 
 # File folders
 folder=minecraft
@@ -71,9 +75,9 @@ updateJar()
 updateLibrary()
 {
 	name="$(echo "$libmeta" | $jq -r ".name")"
-	libmeta="$(echo "$libmeta" | $jq -r "
+	libmeta="$(eval echo "\"$(echo "$libmeta" | sed 's/\"/\\\"/g')\"" | $jq -r "
 		if (has(\"rules\")) then
-			if ((.rules[]? | select(.os?.name? // empty | contains(\"$os\")).action) //
+			if ((.rules[]? | select(.os?.name? // empty | . == \"$os\").action) //
 			(.rules[]? | select(has(\"os\") | not).action) // \"disallow\") == \"disallow\" then
 				empty
 			else
@@ -154,7 +158,7 @@ updateVersionMetadata()
 	echo -e "Updating version $green$version$default..."
 	[ -z "$manifest" ] && manifest="$(get "$manifesturl")"
 
-	info="$(echo "$manifest" | $jq -r ".versions[] | select(.id | contains(\"$version\"))")"
+	info="$(echo "$manifest" | $jq -r ".versions[] | select(.id == \"$version\")")"
 	type="$(echo "$info" | $jq -r ".type")"
 	release="$(echo "$info" | $jq -r ".releaseTime")"
 	url="$(echo "$info" | $jq -r ".url")"
@@ -203,9 +207,21 @@ run()
 	$java -Djava.library.path=natives -cp $jars $class $args
 }
 
+listVersions()
+{
+	echo -e "Fetching version list..."
+	manifest="$(get "$manifesturl")"
+	echo "$manifest" | $jq -r ".versions[] | .id + \" (\" + .type + \")\""
+}
+
 unset manifest meta
 unset jar
 declare -a jar hashlist
+
+if [ "$1" == list ]; then
+	listVersions
+	exit
+fi
 
 mkdir -p "$folder"
 cd "$folder"
