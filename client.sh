@@ -197,6 +197,7 @@ listVersions()
 	echo "$manifest" | $jq -r ".versions[] | .id + \" (\" + .type + \")\""
 }
 
+unalias grep
 unset manifest meta
 unset jar
 declare -a jar hashlist
