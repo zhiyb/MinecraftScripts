@@ -1,7 +1,7 @@
 #!/bin/bash
-java="java -Xmx6G"
+java="java -Xmx1536M"
 args="nogui"
-restart=false
+restart=true
 
 update=true
 export folder=server
