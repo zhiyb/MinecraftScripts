@@ -99,7 +99,7 @@ updateLibraries()
 
 updateAssets()
 {
-	[ -z "$meta" ] && echo -e "${red}Empty metadata{default}" >&2 && return 1
+	[ -z "$meta" ] && echo -e "${red}Empty metadata${default}" >&2 && return 1
 
 	echo "Checking assets..."
 	assets="$(echo "$meta" | $jq -r ".assets")"
@@ -107,7 +107,7 @@ updateAssets()
 	[ -e "$file" ] && [ "$skipcheck" == true ] && return 0
 	sha1="$(echo "$meta" | $jq -r ".assetIndex.sha1")"
 	url="$(echo "$meta" | $jq -r ".assetIndex.url")"
-	updateFile || (echo -e "${red}Failed to fetch assets metadata{default}" >&2 && return 1)
+	updateFile || (echo -e "${red}Failed to fetch assets metadata${default}" >&2 && return 1)
 
 	unset sha1
 	assetsmeta="$(<"$file")"
@@ -124,7 +124,7 @@ load()
 {
 	[ ! -e "versions/$version/$version.json" ] && (updateVersionMetadata || return 1)
 	[ -z "$meta" ] && meta="$(<"versions/$version/$version.json")"
-	[ -z "$meta" ] && echo -e "${red}Empty metadata{default}" >&2 && return 1
+	[ -z "$meta" ] && echo -e "${red}Empty metadata${default}" >&2 && return 1
 	type="$(echo "$meta" | $jq -r ".type")"
 	release="$(echo "$meta" | $jq -r ".releaseTime")"
 
@@ -147,7 +147,7 @@ updateVersionMetadata()
 
 	echo -e "Fetching version $green$version$default metadata..."
 	meta="$(get "$url")"
-	[ -z "$meta" ] && echo -e "${red}Failed to fetch metadata{default}" >&2 && return 1
+	[ -z "$meta" ] && echo -e "${red}Failed to fetch metadata${default}" >&2 && return 1
 	mkdir -p "versions/$version"
 	echo "$meta" > "versions/$version/$version.json"
 }
@@ -163,7 +163,7 @@ update()
 
 run()
 {
-	[ -z "$meta" ] && echo -e "${red}Empty metadata{default}" >&2 && return 1
+	[ -z "$meta" ] && echo -e "${red}Empty metadata${default}" >&2 && return 1
 	[ -z "$type" ] && type="$(echo "$meta" | $jq -r ".type")"
 	[ -z "$assets" ] && assets="$(echo "$meta" | $jq -r ".assets")"
 	[ -z "$version" ] && version="$(echo "$meta" | $jq -r ".id")"
