@@ -3,8 +3,6 @@
 # Argument:
 # list	| Fetch version list from official server
 
-. config.conf
-
 # File folders
 folder=minecraft
 # http://wiki.vg/Game_files
@@ -197,7 +195,7 @@ listVersions()
 	echo "$manifest" | $jq -r ".versions[] | .id + \" (\" + .type + \")\""
 }
 
-unalias grep
+unalias grep 2> /dev/null
 unset manifest meta
 unset jar
 declare -a jar hashlist
@@ -206,6 +204,9 @@ if [ "$1" == list ]; then
 	listVersions
 	exit
 fi
+
+[ ! -e "config.conf" ] && echo "config.conf not found!" && read -s && exit 1
+. config.conf
 
 mkdir -p "$folder"
 cd "$folder"

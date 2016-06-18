@@ -23,7 +23,6 @@ echo "Fetching manifest..."
 manifest="$(get "$manifest")"
 
 version="$(echo "$manifest" | jq -r ".latest.$type")"
-echo "$version"
 info="$(echo "$manifest" | jq -r ".versions[] | select(.id == \"$version\")")"
 time="$(echo "$info" | jq -r ".releaseTime")"
 url="$(echo "$info" | jq -r ".url")"

@@ -1,5 +1,5 @@
 #!/bin/bash
-java="java -Xmx1536M"
+java="java -Xmx2G"
 args="nogui"
 restart=true
 
