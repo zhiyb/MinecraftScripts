@@ -5,8 +5,8 @@ bakfolder=backup
 prefix="${source}_"
 suffix=.tar.bz2
 pattern="${prefix}[0-9]\{8\}-[0-9]\{6\}\.tar\.bz2\$"
-sleep=1h
-baknum=64
+sleep=10h
+baknum=3
 
 function doBackup
 {
