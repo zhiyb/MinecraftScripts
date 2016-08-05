@@ -171,7 +171,11 @@ run()
 	((${#jar[@]} < 1)) && echo -e "${red}Empty jar file list${default}" >&2 && return 1
 	jars="${jar[0]}"
 	for ((i = 1; i != ${#jar[@]}; i++)); do
-		jars="$jars;${jar[$i]}"
+		if [ "$os" == windows ]; then
+			jars="$jars;${jar[$i]}"
+		else
+			jars="$jars:${jar[$i]}"
+		fi
 	done
 
 	class="$(echo "$meta" | $jq -r ".mainClass")"
