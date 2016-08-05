@@ -169,13 +169,14 @@ run()
 	[ -z "$version" ] && version="$(echo "$meta" | $jq -r ".id")"
 
 	((${#jar[@]} < 1)) && echo -e "${red}Empty jar file list${default}" >&2 && return 1
+	if [ "$os" == windows ]; then
+		sep=";"
+	else
+		sep=":"
+	fi
 	jars="${jar[0]}"
 	for ((i = 1; i != ${#jar[@]}; i++)); do
-		if [ "$os" == windows ]; then
-			jars="$jars;${jar[$i]}"
-		else
-			jars="$jars:${jar[$i]}"
-		fi
+		jars="$jars$sep${jar[$i]}"
 	done
 
 	class="$(echo "$meta" | $jq -r ".mainClass")"
