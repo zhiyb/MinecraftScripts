@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# snapshot or release
-type=snapshot
-manifest=https://launchermeta.mojang.com/mc/game/version_manifest.json
-
-[ -z "$folder" ] && folder=server
-[ -z "$infofile" ] && infofile=$folder/latest.txt
+[ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
+. server.conf
 
 get()
 {
@@ -31,6 +27,8 @@ echo "Latest $type: $version ($time)"
 file="$folder/$version.jar"
 if [ -e "$file" ]; then
 	echo -e "File \e[1;32m$file\e[0m already exists"
+	echo "$version.jar" > "$infofile"
+	exit 1
 else
 	echo "Fetching version metadata..."
 	meta="$(get "$url")"
@@ -41,7 +39,7 @@ else
 	echo -e "Downloading \e[1;32m$file\e[0m from: \e[1;33m$url\e[0m"
 	if ! download "$url" "$file"; then
 		echo "\e[1;31mUpdate failed!\e[0m"
-		exit 1
+		exit 2
 	fi
 fi
 

@@ -1,22 +1,20 @@
 #! /bin/bash
 
-source=world
-bakfolder=backup
-prefix="${source}_"
+[ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
+. server.conf
+
 suffix=.tar.bz2
 pattern="${prefix}[0-9]\{8\}-[0-9]\{6\}\.tar\.bz2\$"
-sleep=10h
-baknum=3
 
 function doBackup
 {
 	echo -n "Backing up: "
-	screen -S MC -p 0 -X stuff 'say 备份中, 服务器进入只读模式!\nsave-off\nsave-all\n'
+	screen -S $screen -p 0 -X stuff 'say Backup started, entering read-only mode...\nsave-off\nsave-all\n'
 	sleep 3s
 	echo -n "$1... "
 	tar jcf "$bakfolder/$1" "$source"
 	echo "Done."
-	screen -S MC -p 0 -X stuff 'save-on\nsay 备份完成.\n'
+	screen -S $screen -p 0 -X stuff 'save-on\nsay Backup done.\n'
 }
 
 function tidyBackups
@@ -34,6 +32,6 @@ while :; do
 	filename="${prefix}$(date +%Y%m%d-%H%M%S)${suffix}"
 	doBackup "$filename"
 	tidyBackups
-	sleep ${sleep}
+	sleep ${baksleep}
 done
 exit
