@@ -5,10 +5,11 @@
 
 disconnect()
 {
+	screen -S $screen -p 0 -X stuff 'say New version '$(<$infofile)' available, update scheduled\n'
 	while :; do
 		num="$(netstat -nt | grep -F $port | wc -l)"
 		echo "$num connections."
-		(($num == 0)) && update && exit
+		(($num == 0)) && break
 		sleep 30s
 	done
 }
