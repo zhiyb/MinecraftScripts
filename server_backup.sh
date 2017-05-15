@@ -18,7 +18,8 @@ online()
 doBackup()
 {
 	echo -n "Backing up: "
-	screen -S $screen -p 0 -X stuff 'say Backup started, entering read-only mode...\nsave-off\nsave-all\n'
+	#screen -S $screen -p 0 -X stuff 'say Backup started, entering read-only mode...\nsave-off\nsave-all\n'
+	screen -S $screen -p 0 -X stuff '\nsave-off\nsave-all\n'
 	sleep 6s
 	echo -n "$1... "
 	tar jcf "$bakfolder/$1" "$source"
