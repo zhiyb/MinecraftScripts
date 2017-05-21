@@ -23,6 +23,7 @@ doBackup()
 	sleep 6s
 	echo -n "$1... "
 	tar jcf "$bakfolder/$1" "$source"
+	ln -sf "$1" "$bakfolder/${prefix}latest${suffix}"
 	echo "Done."
 	screen -S $screen -p 0 -X stuff 'save-on\nsay Backup done.\n'
 }

@@ -26,6 +26,6 @@ while :; do
 	update
 	disconnect
 
-	screen -S $screen -p 0 -X stuff 'stop Server update\n'
+	screen -S $screen -p 0 -X stuff '\nstop Server update\n'
 	echo "Stopped server for update."
 done
