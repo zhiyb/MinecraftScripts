@@ -3,6 +3,11 @@ mousetrack on
 term screen-256color
 layout save default
 
+bind j focus down
+bind k focus up
+bind l focus right
+bind h focus left
+
 hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
 
@@ -13,3 +18,4 @@ screen -t backup ./server_backup.sh
 split -v
 focus
 screen -t update ./server_schedule.sh
+focus top
