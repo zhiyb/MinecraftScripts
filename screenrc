@@ -1,5 +1,15 @@
 altscreen on
+mousetrack on
 term screen-256color
+layout save default
 
 hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
+
+screen -t server ./server_loop.sh
+split
+focus
+screen -t backup ./server_backup.sh
+split -v
+focus
+screen -t update ./server_schedule.sh

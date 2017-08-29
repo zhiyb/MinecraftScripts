@@ -3,6 +3,7 @@
 [ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
 . server.conf
 
+echo -e "\e[1;34mServer auto restart: $restart\e[0m"
 while :; do
 	[ -e "$infofile" ] && file="$(<$infofile)"
 	[ -z "$file" ] && echo -e "\e[1;31mCannot locate executable file from $infofile\e[0m" && exit 1

@@ -2,6 +2,7 @@
 
 [ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
 . server.conf
+[ "$updsleep" == 0 ] && exit 0
 
 disconnect()
 {
@@ -22,6 +23,7 @@ update()
 	done
 }
 
+echo -e "\e[1;34mUpdate scheduled every \e[1;37m$updsleep\e[0m"
 while :; do
 	update
 	disconnect

@@ -2,6 +2,7 @@
 
 [ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
 . server.conf
+[ "$baksleep" == 0 ] && exit 0
 
 suffix=.tar.bz2
 pattern="${prefix}[0-9]\{8\}-[0-9]\{6\}\.tar\.bz2\$"
@@ -39,6 +40,7 @@ tidyBackups()
 declare -a backups
 mkdir -p "$bakfolder"
 
+echo -e "\e[1;34mBackup scheduled every \e[1;37m$baksleep\e[0m"
 while :; do
 	online
 	sleep ${baksleep}

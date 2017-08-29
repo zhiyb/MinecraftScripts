@@ -9,21 +9,5 @@ screen -S $screen -Q select . && echo -e "\e[1;31mSession $screen already exists
 
 [ "$updsleep" != 0 ] && ./server_update.sh
 
-# Main server execution loop
-echo -e "\e[1;33mserver_loop.sh\e[0m"
-screen -c screenrc -dmS $screen ./server_loop.sh
-
-# Automatic backup
-if [ "$baksleep" != 0 ]; then
-	sleep 3s
-	echo -e "\e[1;33mserver_backup.sh\e[0m"
-	screen -S $screen -X screen -t backup ./server_backup.sh
-fi
-
-# Automatic update
-if [ "$updsleep" != 0 ]; then
-	echo -e "\e[1;33mserver_schedule.sh\e[0m"
-	screen -S $screen -X screen -t schedule ./server_schedule.sh
-fi
-
-screen -r $screen -p 0
+# Start screen session with windows
+screen -c screenrc -S $screen -p 0
