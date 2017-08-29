@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
 [ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
 . server.conf
 

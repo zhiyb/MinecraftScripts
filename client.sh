@@ -210,6 +210,7 @@ if [ "$1" == list ]; then
 	exit
 fi
 
+cd "$(dirname "$0")"
 [ ! -e "config.conf" ] && echo "config.conf not found!" && read -s && exit 1
 . config.conf
 
