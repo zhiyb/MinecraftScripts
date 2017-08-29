@@ -3,7 +3,7 @@
 [ ! -e "server.conf" ] && echo -e "\e[0;35mserver.conf \e[1;31mnot found\e[0m" && exit 1
 . server.conf
 
-echo -e "\e[1;34mServer auto restart: $restart\e[0m"
+echo -e "\e[1;34mServer auto restart: \e[1;37m$restart\e[0m"
 while :; do
 	[ -e "$infofile" ] && file="$(<$infofile)"
 	[ -z "$file" ] && echo -e "\e[1;31mCannot locate executable file from \e[0;35m$infofile\e[0m" && exit 1
