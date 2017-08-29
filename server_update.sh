@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ ! -e "server.conf" ] && echo "server.conf not found!" && exit 1
+[ ! -e "server.conf" ] && echo -e "\e[0;35mserver.conf \e[1;31mnot found\e[0m" && exit 1
 . server.conf
 
 get()
@@ -15,30 +15,30 @@ download()
 	#aria2c --daemon=false --enable-rpc=false -c -o "$2" "$1"
 }
 
-echo "Fetching manifest..."
+echo -e "\n\e[1;37m$(date -Iseconds) \e[1;32m$0\e[1;33m: Fetching manifest...\e[0m"
 manifest="$(get "$manifest")"
 
 version="$(echo "$manifest" | jq -r ".latest.$type")"
 info="$(echo "$manifest" | jq -r ".versions[] | select(.id == \"$version\")")"
 time="$(echo "$info" | jq -r ".releaseTime")"
 url="$(echo "$info" | jq -r ".url")"
-echo "Latest $type: $version ($time)"
+echo -e "\e[1;33mLatest \e[1;37m$type\e[1;33m: \e[1;37m$version ($time)\e[0m"
 
 file="$folder/$version.jar"
 if [ -e "$file" ]; then
-	echo -e "File \e[1;32m$file\e[0m already exists"
+	echo -e "\e[1;36mFile \e[1;35m$file \e[1;36malready exists\e[0m"
 	echo "$version.jar" > "$infofile"
 	exit 1
 else
-	echo "Fetching version metadata..."
+	echo -e "\e[1;33mFetching version metadata...\e[0m"
 	meta="$(get "$url")"
 
 	server="$(echo "$meta" | jq -r ".downloads.server")"
 	url="$(echo "$server" | jq -r ".url")"
 
-	echo -e "Downloading \e[1;32m$file\e[0m from: \e[1;33m$url\e[0m"
+	echo -e "\e[1;33mDownloading \e[1;35m$file \e[33mfrom: \e[1;37m$url\e[0m"
 	if ! download "$url" "$file"; then
-		echo "\e[1;31mUpdate failed!\e[0m"
+		echo -e "\e[1;31mUpdate failed!\e[0m"
 		exit 2
 	fi
 fi
