@@ -11,7 +11,7 @@ screen -S $screen -Q select . && echo -e "\e[1;31mSession $screen already exists
 
 # Main server execution loop
 echo -e "\e[1;33mserver_loop.sh\e[0m"
-screen -dmS $screen ./server_loop.sh
+screen -c screenrc -dmS $screen ./server_loop.sh
 
 # Automatic backup
 if [ "$baksleep" != 0 ]; then
