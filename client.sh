@@ -5,6 +5,12 @@
 
 # File folders
 folder=minecraft
+
+# http://wiki.vg/Authentication
+authserv=https://authserver.mojang.com
+authurl="$authserv/authenticate"
+refreshurl="$authserv/refresh"
+
 # http://wiki.vg/Game_files
 # Manifest JSON file URL
 manifesturl=https://launchermeta.mojang.com/mc/game/version_manifest.json
@@ -15,6 +21,7 @@ red="\e[1;31m"
 green="\e[1;32m"
 yellow="\e[1;33m"
 blue="\e[1;34m"
+white="\e[1;37m"
 default="\e[0m"
 
 get()
@@ -26,6 +33,40 @@ download()
 {
 	curl --progress-bar -o "$2" -L "$1"
 	#aria2c --daemon=false --enable-rpc=false -c -o "$2" "$1"
+}
+
+auth()
+{
+	url="$1"
+	shift
+	get "$url" -H "Content-Type: application/json" -d $@
+}
+
+authenticate()
+{
+	echo -ne "Username: $white$auth_username"
+	[ -z "$auth_username" ] && read auth_username || echo
+	echo -ne "${default}Password: "
+	[ -z "$auth_password" ] && read -s auth_password || echo
+	echo -e "${default}Logging in..."
+	info="$(auth "$authurl" "{\"agent\":{\"name\":\"Minecraft\",\"version\":1},\"username\":\"$auth_username\",\"password\":\"$auth_password\"}")"
+	err="$(echo "$info" | $jq -r ".errorMessage")"
+	[ "$err" == "null" ] && err="$(echo "$info" | $jq -r ".error")"
+	if [ "$err" != "null" ]; then
+		echo -e "${red}Error: $err ${default}" >&2
+		unset auth_username auth_password
+		return 1
+	fi
+
+	auth_player_name="$(echo "$info" | jq -r ".selectedProfile.name")"
+	auth_uuid="$(echo "$info" | jq -r ".selectedProfile.id")"
+	auth_access_token="$(echo "$info" | jq -r ".accessToken")"
+	client_token="$(echo "$info" | jq -r ".clientToken")"
+	legacy="$(echo "$info" | jq -r ".selectedProfile.legacy")"
+	user_type=mojang
+	[ "$legacy" == true ] && user_type=legacy
+	echo "$info" > launcher.json
+	return 0
 }
 
 checkFile()
@@ -204,22 +245,28 @@ unalias grep 2> /dev/null
 unset manifest meta
 unset jar
 declare -a jar hashlist
+cd "$(dirname "$0")"
 
 if [ "$1" == list ]; then
 	listVersions
 	exit
 fi
 
-cd "$(dirname "$0")"
+# Load configurations
 [ ! -e "config.conf" ] && echo "config.conf not found!" && read -s && exit 1
 . config.conf
 
 mkdir -p "$folder"
 cd "$folder"
 
+# Refresh / Login
+if [ "$auth" == true ]; then
+	refresh || until authenticate; do :; done
+fi
+
 if [ "$version" == "snapshot" ] || [ "$version" == "release" ]; then
 	update || (read -s && exit 1)
 fi
 load || (read -s && exit 1)
-run || (echo -e "${red}Fatal error${default}" >&2 && read -s && exit 1)
+run || (echo -e "${red}Fatal error${default}" >&2 && exit 1)
 exit
