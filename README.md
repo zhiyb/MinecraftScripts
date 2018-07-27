@@ -18,7 +18,7 @@ And Minecraft client update & launching script
 
 > ### Debian
 > ```
-> apt install screen jq
+> apt install screen jq net-tools
 > ```
 
 ```
