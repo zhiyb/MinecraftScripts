@@ -15,7 +15,7 @@ download()
 	#aria2c --daemon=false --enable-rpc=false -c -o "$2" "$1"
 }
 
-echo -e "\n\033[1;37m$(date -Iseconds) \033[1;32m$0\033[1;33m: Fetching manifest...\033[0m"
+echo -e "\n\033[1;37m$(date +%Y-%m-%dT%H:%M:%S%z) \033[1;32m$0\033[1;33m: Fetching manifest...\033[0m"
 manifest="$(get "$manifest")"
 
 version="$(echo "$manifest" | jq -r ".latest.$type")"

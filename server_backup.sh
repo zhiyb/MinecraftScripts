@@ -18,7 +18,7 @@ online()
 
 doBackup()
 {
-	echo -ne "\n\033[1;37m$(date -Iseconds) \033[1;32m$0\033[1;33m: Backing up: "
+	echo -ne "\n\033[1;37m$(date +%Y-%m-%dT%H:%M:%S%z) \033[1;32m$0\033[1;33m: Backing up: "
 	#screen -S $screen -p 0 -X stuff 'say Backup started, entering read-only mode...\nsave-off\nsave-all\n'
 	screen -S $screen -p 0 -X stuff '\nsave-off\nsave-all\n'
 	sleep 10s
