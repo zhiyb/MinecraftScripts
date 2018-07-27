@@ -10,7 +10,7 @@ pattern="${prefix}[0-9]\{8\}-[0-9]\{6\}\.tar\.bz2\$"
 online()
 {
 	while :; do
-		num="$(netstat -nt | grep -F ESTABLISHED | grep -F $port | wc -l)"
+		num="$(netstat -n | grep tcp | grep -F ESTABLISHED | grep -F $port | wc -l)"
 		(($num != 0)) && echo -e "\033[1;37m$num \033[0;33mconnections.\033[0m" && break
 		sleep 30
 	done
