@@ -12,6 +12,6 @@ while :; do
 	(cd $folder; $java -jar "$file" $args)
 	[ "$restart" != "true" ] && break
 	echo -e "\033[1;33mRestarting in 5 seconds...\033[0m"
-	sleep 5s
+	sleep 5
 done
 exit 0

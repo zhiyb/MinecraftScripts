@@ -12,7 +12,7 @@ online()
 	while :; do
 		num="$(netstat -nt | grep -F ESTABLISHED | grep -F $port | wc -l)"
 		(($num != 0)) && echo -e "\033[1;37m$num \033[0;33mconnections.\033[0m" && break
-		sleep 30s
+		sleep 30
 	done
 }
 
@@ -21,7 +21,7 @@ doBackup()
 	echo -ne "\n\033[1;37m$(date +%Y-%m-%dT%H:%M:%S%z) \033[1;32m$0\033[1;33m: Backing up: "
 	#screen -S $screen -p 0 -X stuff 'say Backup started, entering read-only mode...\nsave-off\nsave-all\n'
 	screen -S $screen -p 0 -X stuff '\nsave-off\nsave-all\n'
-	sleep 10s
+	sleep 10
 	echo -ne "\033[0;35m$1\033[1;33m..."
 	tar jcf "$bakfolder/$1" "$source"
 	ln -sf "$1" "$bakfolder/${prefix}latest${suffix}"

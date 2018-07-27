@@ -11,7 +11,7 @@ disconnect()
 		num="$(netstat -nt | grep -F $port | wc -l)"
 		echo -e "\033[1;37m$num \033[0;33mconnections.\033[0m"
 		(($num == 0)) && break
-		sleep 30s
+		sleep 30
 	done
 }
 
