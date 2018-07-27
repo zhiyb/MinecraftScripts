@@ -2,3 +2,4 @@ client.conf
 config.conf
 server.conf
 */
+.DS_Store
