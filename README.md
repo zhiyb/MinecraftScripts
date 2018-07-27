@@ -7,7 +7,7 @@ And Minecraft client update & launching script
 
 > ### FreeBSD
 > ```
-> pkg install screen jq bash openjdk
+> pkg install screen jq bash openjdk8
 > ```
 
 > ### MacOS
